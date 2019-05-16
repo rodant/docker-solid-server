@@ -8,7 +8,7 @@
 version: '3.7'
 services:
   server:
-    image: aveltens/solid-server:latest # (!) use specific version tag here
+    image: spoterme/solid-server:5.0.1 # (!) use specific version tag here
 
     # this ensures automatic container start, when host reboots
     restart: always
@@ -19,16 +19,17 @@ services:
     volumes:
       # mount local directories to the container
       # (!) the host directories have to exist and be owned by UID 1000
-      - /opt/solid/data:/opt/solid/data
-      - /opt/solid/.db:/opt/solid/.db
-      - /opt/solid/config:/opt/solid/config
+      - ~/tmp/solid/data:/opt/solid/data
+      - ~/tmp/solid/.db:/opt/solid/.db
+      - ~/tmp/solid/config:/opt/solid/config
+      - ~/tmp/solid/certs:/opt/solid/certs
 
       # (!) mount existing TLS certificates, e.g. from letsencrypt
       # (!) ensure that the key and fullchain files are readable by UID 1000
-      - /etc/letsencrypt/live/solid.example/:/opt/solid/certs
+      # - /etc/letsencrypt/live/solid.example/:/opt/solid/certs
 
     environment:
       # (!) use your actual SOLID_SERVER_URI
-      - "SOLID_SERVER_URI=https://solid.example"
-      - "SOLID_SSL_KEY=/opt/solid/certs/key.pem"
-      - "SOLID_SSL_CERT=/opt/solid/certs/fullchain.pem"
+      - "SOLID_SERVER_URI=https://localhost"
+      - "SOLID_SSL_KEY=/opt/solid/certs/solid-temporary.key"
+      - "SOLID_SSL_CERT=/opt/solid/certs/solid-temporary.cert"
